@@ -21,7 +21,7 @@ class Quiz {
     this.score = 0;
 
     const triviaApi = new TriviaApi();
-    triviaApi.getQuestions(Quiz.DEFAULT_QUIZ_LENGTH)
+    triviaApi.triviaApiFetch(Quiz.DEFAULT_QUIZ_LENGTH)
       .then(data => {
         data.results.forEach(questionData => {
           this.unasked.push(new Question(questionData));
@@ -44,7 +44,7 @@ class Quiz {
   // Take first question object out of array, place it in askedQuestions array
   nextQuestion() {
     const currentQuestion = this.getCurrentQuestion();
-    if (currentQuestion && currentQuestion.AnswerStatus() === -1) {
+    if (currentQuestion && currentQuestion.answerStatus() === -1) {
       return false
     }
 
@@ -61,9 +61,9 @@ class Quiz {
     const currentQuestion = this.getCurrentQuestion();
 
     if (!currentQuestion) return false;
-    if (currentQuestion.AnswerStatus() !== -1) return false;
+    if (currentQuestion.answerStatus() !== -1) return false;
     currentQuestion.submitAnswer(userInput);
-    if (currentQuestion.AnswerStatus() === 1) {
+    if (currentQuestion.answerStatus() === 1) {
       this.incrementScore();
     }
     return true;
