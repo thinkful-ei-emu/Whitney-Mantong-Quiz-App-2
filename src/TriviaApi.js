@@ -1,12 +1,29 @@
 class TriviaApi {
-  constructor(){
-    this.BASE_URL = 'https://opentdb.com/api.php?amount=5&category=20&difficulty=easy&type=multiple';
+  constructor(baseUrl = ''){
+    this.error = '';
+    this.baseUrl = baseUrl;
   }
 
-  triviaApiFetch(...args) {
+  // getToken() {
+  //   return fetch('https://opentdb.com/api_token.php?command=request')
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         this.error = {code: response.status};
+  //         return response.json();
+  //       }
+  //     })
+  //     .then (jsonResponse => {
+  //       if (this.error) {
+  //         this.error.message = jsonResponse.message;
+  //         return Promise.reject(this.error);
+  //       }
+  //     });
+  // }
+
+  triviaApiFetch() {
     // setup error variable in scope outside of promise chain
     let error;
-    return fetch(...args)
+    return fetch(this.baseUrl)
       .then(res => {
         if (!res.ok) {
           // if response is not 2xx, start building error object
@@ -36,9 +53,6 @@ class TriviaApi {
         // otherwise, return the json as normal resolved Promise
         return data;
       });
-  }
-  getQuestions(){
-    this.triviaApiFetch(this.BASE_URL);
   }
 }
 
