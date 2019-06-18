@@ -1,7 +1,6 @@
 import Question from './Question';
 import TriviaApi from './TriviaApi';
 import Model from './lib/Model';
-import Renderer from './lib/Renderer';
 
 class Quiz extends Model {
 
@@ -44,11 +43,13 @@ class Quiz extends Model {
     
     .catch(err => console.log(err.message));
   }
+
   totalQuestions (){
     return this.asked.length + this.unasked.length;
   }
+
   getCurrentQuestion() {
-    console.log(this.asked[0]);
+    //console.log(this.asked[0]);
     return this.asked[0];
   }
 
@@ -56,6 +57,7 @@ class Quiz extends Model {
   addScoreHistory() {
     this.scoreHistory.push(this.score);
   }
+  
   progress(){
     if (this.active===false){
       return 'Inactive';

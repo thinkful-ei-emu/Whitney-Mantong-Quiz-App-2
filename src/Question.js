@@ -1,5 +1,8 @@
-class Question {
+import Model from './lib/Model';
+
+class Question extends Model {
   constructor(questionData) {
+    super();
     this.text = questionData.question; //Question text
     this.answers = [questionData.correct_answer, ...questionData.incorrect_answers]; //Array of strings, each a unique answer
     this.correctAnswer = questionData.correct_answer; //Correct answer string, must match at least one element of answers array
