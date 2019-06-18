@@ -3,7 +3,7 @@ import TriviaApi from './TriviaApi';
 
 class Quiz {
 
-  //static DEFAULT_QUIZ_LENGTH = 2;
+  static DEFAULT_QUIZ_LENGTH = 2;
 
   constructor() {
     this.unasked = []; // Array of Question instances
@@ -11,28 +11,29 @@ class Quiz {
     this.score = 0; // integer
     this.scoreHistory = []; //array of integers
     this.active = false; //boolean
-    this.BASE_URL = 'https://opentdb.com/api.php?amount=5&category=20&difficulty=easy&type=multiple';
-    this.triviaApi = new TriviaApi(this.BASE_URL);
-  }
+    }
 
   // Change active to true, puts first question in asked array (per wireframe)
   startGame() {
-    this.active = true;
-    this.getQuestions().then(() => {
-      //console.log(this.unasked);
-      this.nextQuestion();
-      console.log(this);
-      // Start rendering quiz UI
-    });
+    this.unasked = [];
+    this.asked = [];
+    this.active = false;
+    this.score = 0;
+
+    const triviaApi = new TriviaApi();
+    triviaApi.getQuestions(Quiz.DEFAULT_QUIZ_LENGTH)
+      .then(data => {
+        data.results.forEach(questionData => {
+          this.unasked.push(new Question(questionData));
+          this.nextQuestion();
+          this.active = true;
+        });
+    })
+    .catch(err => console.log(err.message));
   }
 
-  getQuestions() {
-    return this.triviaApi.triviaApiFetch().then((responseObj) => {
-      this.unasked = responseObj.results.map(result => {
-        return new Question(result.question, result.incorrect_answers, result.correct_answer);
-      });
-      return Promise.resolve(true);
-    });
+  getCurrentQuestion() {
+    return this.asked[0];
   }
 
   // Adds current score to score history (called by stopGame)
@@ -42,31 +43,31 @@ class Quiz {
 
   // Take first question object out of array, place it in askedQuestions array
   nextQuestion() {
-    const askedQuestion = this.unasked.shift();
-    this.asked.push(askedQuestion);
+    const currentQuestion = this.getCurrentQuestion();
+    if (currentQuestion && currentQuestion.AnswerStatus() === -1) {
+      return false
+    }
+
+    this.asked.unshift(this.unasked.pop());
+    return true;
   }
 
   // if the answer is correct, increment score by 1
   incrementScore() {
     this.score +=1;
   }
-  // $('.submit').submit(() => {
-  //   quiz.handleAnswer($('.answer').val());
-  // })
+
   handleAnswer(userInput) {
-    const currentQuestion = this.asked[this.asked.length-1];
+    const currentQuestion = this.getCurrentQuestion();
+
+    if (!currentQuestion) return false;
+    if (currentQuestion.AnswerStatus() !== -1) return false;
     currentQuestion.submitAnswer(userInput);
-    if (currentQuestion.answerStatus() === 1) {
+    if (currentQuestion.AnswerStatus() === 1) {
       this.incrementScore();
     }
-    console.log(this);
+    return true;
+    }
   }
-
-  // When game is stopped invoke addScoreHistory and set active to false
-  stopGame() {
-    this.addScoreHistory();
-    this.active = false;
-  }
-}
 
 export default Quiz;
