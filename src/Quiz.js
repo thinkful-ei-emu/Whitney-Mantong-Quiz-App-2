@@ -1,45 +1,64 @@
 import Question from './Question';
+import TriviaApi from './TriviaApi';
 
 class Quiz {
 
-  static DEFAULT_QUIZ_LENGTH = 2;
+  //static DEFAULT_QUIZ_LENGTH = 2;
 
   constructor() {
-    // Array of Question instances
-    this.unasked = [];
-    // Array of Question instances
-    this.asked = [];
+    this.unasked = []; // Array of Question instances
+    this.asked = []; // Array of Question instances
+    this.score = 0; //integer
+    this.scoreHistory = []; //array of integers
     this.active = false; //boolean
 
-    // TASK: Add more props here per the exercise
-    this.scoreHistory = []; //array of integers
-    this.score = 0; //integer
-
   }
 
-  // Example method:
+  // Change active to true, puts first question in asked array (per wireframe)
   startGame() {
     this.active = true;
-    this.unasked.push(triviaApi.data.results)
+    const triviaApi = new TriviaApi();
+    console.log(triviaApi);
+    console.log(triviaApi.getQuestions());
+    console.log(questionObj);
+
+    questionObj.forEach(() => {
+      const singleQuestion = new Question();
+      Question.text = singleQuestion.question;
+      Question.answers = (singleQuestion['correct_answer'] + singleQuestion['incorrect_answers']);
+      Question.correctAnswer = singleQuestion['correct_answer'];
+
+      this.unasked.push(singleQuestion);
+    });
+    this.nextQuestion();
   }
 
-  addScoreHistory() {}
-
-  setScore(boolean) {
-    if (true) {
-      this.score +=1;
-    }
+  // Adds current score to score history (called by stopGame)
+  addScoreHistory() {
+    this.scoreHistory.push(this.score);
   }
 
+  createQuestion() {
+
+  }
+
+  // Take first question object out of array, place it in askedQuestions array
   nextQuestion() {
     const askedQuestion = this.unasked.shift();
     this.asked.push(askedQuestion);
   }
 
+  // if the answer is correct, increment score by 1
   changeScore() {
-    if (this.userAnswer === this.correctAnswer) {
-      Quiz.setScore(true);
+    if (Question.userAnswer === Question.correctAnswer) {
+      this.score +=1;
     }
+  }
+
+  // When game is stopped invoke addScoreHistory and set active to false
+  stopGame() {
+    this.addScoreHistory();
+    this.active = false;
   }
 }
 

@@ -1,11 +1,10 @@
 class TriviaApi {
   constructor(){
     this.BASE_URL = 'https://opentdb.com/api.php?amount=5&category=20&difficulty=easy&type=multiple';
-    this.data;
   }
 
   triviaApiFetch(...args) {
-    // setup var in scope outside of promise chain
+    // setup error variable in scope outside of promise chain
     let error;
     return fetch(...args)
       .then(res => {
@@ -39,7 +38,7 @@ class TriviaApi {
       });
   }
   getQuestions(){
-    this.triviaApiFetch(this.BASE_URL).then((data) => this.data.results = data);
+    this.triviaApiFetch(this.BASE_URL);
   }
 }
 
