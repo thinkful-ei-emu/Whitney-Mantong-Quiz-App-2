@@ -8,13 +8,13 @@ class QuizDisplay extends Renderer {
       'click .start-quiz': 'handleStart',
       'click .submit': 'handleSubmit',
       'click .continue': 'handleContinue',
-      'click .playAgain': 'handlePlayAgain'
+      'click .play-again': 'handlePlayAgain'
     };
   }
 
   _generateIntro() {
     return `
-      <div>
+      <div class="intro">
         <p>
           Welcome to the Trivia Quiz
         </p>
@@ -30,8 +30,8 @@ class QuizDisplay extends Renderer {
 
   generateAnswers() {
     this.arrayOfAnswers = this.model.getCurrentQuestion().answers.map((answer, i) => {
-      return `<label for="${i}"> ${answer}
-      <input type="radio" name="answer" id="${i}" value="${answer}" checked>
+      return `<label for="${i}"> 
+      <input type="radio" name="answer" id="${i}" value="${answer}" checked>${answer}
       </label>`;
     });
     return `<form class="js-form">
@@ -46,20 +46,24 @@ class QuizDisplay extends Renderer {
     return `<div>
     <p>You got it!</p>
     <p>The correct answer was:</p>
-    <p>${this.model.getCurrentQuestion().correctAnswer}</p>
+    <p class="correct-answer">${this.model.getCurrentQuestion().correctAnswer}</p>
     </div>
-    <button class="continue">Continue</button>`;
+    <div class="buttons">
+      <button class="continue">Continue</button>
+    </div>`;
   }
 
   generateFalseAnswer() {
     return `<div>
     <p>Sorry, that's incorrect.</p>
     <p>You answered:</p>
-    <p>${this.model.getCurrentQuestion().userAnswer}</p>
+    <p class="incorrect-answer">${this.model.getCurrentQuestion().userAnswer}</p>
     <p>The correct answer was:</p>
-    <p>${this.model.getCurrentQuestion().correctAnswer}</p>
+    <p class="correct-answer">${this.model.getCurrentQuestion().correctAnswer}</p>
     </div>
-    <button class="continue">Continue</button>`;
+    <div class="buttons">
+      <button class="continue">Continue</button>
+    </div>`;
   }
 
   selectAnswer() {
@@ -80,7 +84,7 @@ class QuizDisplay extends Renderer {
 
   _generateQuestion(){
     return `
-    <div>
+    <div class="question">
       <p>
         ${this.model.getCurrentQuestion().text}
       </p>
@@ -90,17 +94,19 @@ class QuizDisplay extends Renderer {
   }
 
   generateComplete() {
-    return `<div>
+    return `<div class="complete">
     <p>Good job!</p>
     <p>Your final score was ${this.model.score} out of ${this.model.asked.length}.</p>
     ${this.generateCongrats()}
-    <button class="playAgain">Play Again</button>
+    </div>
+    <div class="buttons">
+      <button class="play-again">Play Again</button>
     </div>`;
   }
 
   generateCongrats() {
-    if (this.model.score > this.model.highScore) {
-      return `<p>
+    if (this.model.score === this.model.highScore) {
+      return `<p class="congrats">
       That's a new high score!
       </p>`;
     } else {
@@ -142,6 +148,8 @@ class QuizDisplay extends Renderer {
       this.model.nextQuestion();
     } 
     else {
+      this.model.addScoreHistory();
+      this.model.highScoreReport();
       this.model.endOfQuiz();
     }
     this.model.update();
@@ -152,6 +160,8 @@ class QuizDisplay extends Renderer {
     // handle Play Again button
     this.model.startGame();
     // do something with high score
+    
+
   }
 }
 

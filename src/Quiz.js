@@ -4,7 +4,7 @@ import Model from './lib/Model';
 
 class Quiz extends Model {
 
-  static DEFAULT_QUIZ_LENGTH = 2;
+  static DEFAULT_QUIZ_LENGTH = 5;
 
   constructor() {
     super();
@@ -22,7 +22,6 @@ class Quiz extends Model {
   // Change active to true, puts first question in asked array (per wireframe)
   startGame() {
     
-    this.highScore =0;
     this.unasked = [];
     this.asked = [];
     this.active = false;
@@ -66,7 +65,6 @@ class Quiz extends Model {
 
   // Take first question object out of array, place it in askedQuestions array
   nextQuestion() {
-    console.log('Next question called');
     const currentQuestion = this.getCurrentQuestion();
     if (currentQuestion && currentQuestion.answerStatus() === -1) {
       return false
@@ -80,9 +78,11 @@ class Quiz extends Model {
   incrementScore() {
     this.score +=1;
   }
-  highScore(){
-    this.highScore = Math.max(this.scoreHistory);
+
+  highScoreReport(){
+    this.highScore = Math.max(...this.scoreHistory);
   }
+
   handleAnswer(userInput) {
     const currentQuestion = this.getCurrentQuestion();
 
@@ -97,6 +97,8 @@ class Quiz extends Model {
 
     endOfQuiz() {
       this.active = false;
+      // this.addScoreHistory();
+      // this.highScoreReport();
     }
   }
 

@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import Quiz from './Quiz';
-import TriviaApi from './TriviaApi';
 import QuizDisplay from './QuizDisplay';
 import QuizStatus from './QuizStatus';
+import './styles/styles.css';
 
 function main() {
   const quiz = new Quiz();

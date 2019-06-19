@@ -1,0 +1,112 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Mali', cursive;
+}
+
+.score-bar ul{
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 0;
+  font-size: 14px;
+}
+
+.display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 19px;
+}
+
+.intro {
+  text-align: center;
+}
+
+.js-form {
+  text-align: center;
+}
+.js-form label{
+  display: block;
+}
+
+.question p {
+  text-align: center;
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.start-quiz {
+  background-color: lightblue;
+  box-shadow: 0px 3px 5px -1px   black;
+  font-size: 18px;
+}
+
+.submit {
+  background-color: lightblue;
+  box-shadow: 0px 3px 5px -1px   black;
+  font-size: 18px;
+}
+
+.continue {
+  background-color: lightblue;
+  box-shadow: 0px 3px 5px -1px   black;
+  font-size: 18px;
+}
+
+.play-again {
+  background-color: lightblue;
+  box-shadow: 0px 3px 5px -1px   black;
+  font-size: 18px;
+}
+
+.correct-answer {
+  color: green;
+  font-size: 30px;
+}
+
+.incorrect-answer {
+  color: red;
+  font-size: 30px;
+}
+
+.complete {
+  text-align: center;
+}
+
+.congrats {
+  text-align: center;
+}
+
+/* MEDIA QUERIES */
+
+@media only screen and (min-width: 400px) {
+  .score-bar ul{
+    font-size: 18px;
+  }
+}
+
+@media only screen and (min-width: 550px){
+  .score-bar ul {
+    font-size: 25px;
+  }
+
+  .display {
+    font-size: 25px;
+  }
+
+}
+
+@media only screen and (min-width: 800px) {
+  body {
+    text-align: center;
+
+  }
+  main {
+    margin:0 auto;
+    width: 800px;
+  }
+}

@@ -5,7 +5,7 @@ class QuizStatus extends Renderer {
     // return some HTML here, utilizing `this.model`
     
     return `
-      <div>
+      <div class="score-bar">
       <ul>
        <li> Score:${this.model.score} </li>
        <li> High Score: ${this.model.highScore}</li>
