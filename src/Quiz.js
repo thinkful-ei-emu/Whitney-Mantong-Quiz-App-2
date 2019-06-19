@@ -16,7 +16,7 @@ class Quiz extends Model {
     this.scoreHistory = []; //array of integers
     this.active = false; //boolean
    
-    this.currentQuestion=this.getCurrentQuestion();
+    this.currentQuestion = this.getCurrentQuestion();
     }
    
   // Change active to true, puts first question in asked array (per wireframe)
@@ -34,11 +34,10 @@ class Quiz extends Model {
       .then(data => {
         data.results.forEach(questionData => {
           this.unasked.push(new Question(questionData));
-          this.nextQuestion();
-          this.active = true;
-          this.update();
         });
-    
+        this.active = true;
+        this.nextQuestion();
+        this.update();
     })
     
     .catch(err => console.log(err.message));
@@ -57,18 +56,17 @@ class Quiz extends Model {
   addScoreHistory() {
     this.scoreHistory.push(this.score);
   }
-  
+
   progress(){
-    if (this.active===false){
+    if (this.active === false){
       return 'Inactive';
     }
-    else{
       return  `${this.asked.length} of ${this.totalQuestions()}`;
-    }
   }
 
   // Take first question object out of array, place it in askedQuestions array
   nextQuestion() {
+    console.log('Next question called');
     const currentQuestion = this.getCurrentQuestion();
     if (currentQuestion && currentQuestion.answerStatus() === -1) {
       return false
@@ -96,6 +94,12 @@ class Quiz extends Model {
     }
     return true;
     }
+
+    endOfQuiz() {
+      this.active = false;
+    }
   }
+
+
 
 export default Quiz;
