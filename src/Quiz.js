@@ -29,6 +29,8 @@ class Quiz extends Model {
     
 
     const triviaApi = new TriviaApi();
+    triviaApi.tokenValidation()
+      .then(() => console.log('token validation complete'));
     triviaApi.triviaApiFetch(Quiz.DEFAULT_QUIZ_LENGTH)
       .then(data => {
         data.results.forEach(questionData => {
