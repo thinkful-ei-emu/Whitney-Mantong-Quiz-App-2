@@ -15,33 +15,47 @@ class Quiz extends Model {
     this.score = 0; // integer
     this.scoreHistory = []; //array of integers
     this.active = false; //boolean
-   
+    this.token = ''; // string
     this.currentQuestion = this.getCurrentQuestion();
+    this.triviaApi = new TriviaApi();
     }
    
+    tokenValidation() {
+      return new Promise((resolve, reject) => {
+        if(this.token === '') {
+          console.log('No token detected, getting new token')
+          this.triviaApi.tokenFetch()
+            .then((token) => {
+              this.token = token;
+              resolve();
+            })
+        } else {
+          resolve();
+        }
+      }) 
+    }
+
   // Change active to true, puts first question in asked array (per wireframe)
   startGame() {
-    
+    console.log(TriviaApi.BASE_URL);
     this.unasked = [];
     this.asked = [];
     this.active = false;
     this.score = 0;
     
-
-    const triviaApi = new TriviaApi();
-    triviaApi.tokenValidation()
-      .then(() => console.log('token validation complete'));
-    triviaApi.triviaApiFetch(Quiz.DEFAULT_QUIZ_LENGTH)
-      .then(data => {
-        data.results.forEach(questionData => {
-          this.unasked.push(new Question(questionData));
-        });
-        this.active = true;
-        this.nextQuestion();
-        this.update();
-    })
-    
-    .catch(err => console.log(err.message));
+    this.tokenValidation()
+      .then(() => {
+        return this.triviaApi.triviaApiFetch(Quiz.DEFAULT_QUIZ_LENGTH, this.token)
+        .then(data => {
+          data.results.forEach(questionData => {
+            this.unasked.push(new Question(questionData));
+          });
+          this.active = true;
+          this.nextQuestion();
+          this.update();
+        })
+      })
+      .catch(err => console.log(err.message));
   }
 
   totalQuestions (){

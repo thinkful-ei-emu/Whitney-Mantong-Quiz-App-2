@@ -1,13 +1,5 @@
 class TriviaApi {
   static BASE_URL = 'https://opentdb.com/api.php';
-  static TOKEN = ''; 
-
-tokenValidation() {
-  if(this.TOKEN === '') {
-    console.log('No token detected, getting new token')
-    this.tokenFetch();
-  }
-}
 
   tokenFetch() {
     return fetch('https://opentdb.com/api_token.php?command=request')
@@ -21,15 +13,15 @@ tokenValidation() {
         if (data.response_code !== 0) {
           return Promise.reject({message: "Token not made!"});
         }
-        this.TOKEN = JSON.stringify(data.token);
-        console.log('Got the new token, and assigned it', this.TOKEN);
+         return data.token;
       })
   }
   
-  triviaApiFetch(count) {
+  triviaApiFetch(count, token) {
+    //console.log(`token: ${token}`);
     const url = new URL(TriviaApi.BASE_URL);
     url.searchParams.set('amount', count);
-    url.searchParams.set('token', TriviaApi.TOKEN);
+    url.searchParams.set('token', token);
     console.log(url);
     return fetch(url)
       .then(res => {
